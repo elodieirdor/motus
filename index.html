@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr-FR" data-ng-app="motusApp">
+<head>
+    <title>Motus</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body data-ng-controller="gameCtrl">
+<div class="container">
+    <h1>Motus</h1>
+
+    <div data-ng-if="home" class="actions">
+        <button type="button" class="btn btn-lg btn-primary btn-block" data-ng-click="playGame()">
+            Nouvelle partie
+        </button>
+        <button type="button" class="btn btn-lg btn-primary btn-block" data-ng-click="setParameters()">
+            Param&egrave;tres
+        </button>
+    </div>
+    <div data-ng-if="playingGame">
+        <button class="btn btn-default" type="button" data-ng-click="backHome()">
+            <i class="glyphicon glyphicon-home"></i> Accueil
+        </button>
+        <button class="btn btn-default pull-right" type="button" data-ng-click="initGame()">
+            <i class="glyphicon glyphicon-refresh"></i> Recommencer
+        </button>
+        <div class="board-game">
+            <div data-ng-repeat="row in range(nbRows) track by $index" class="row">
+                <div class="square" data-ng-repeat="row in range(nbSquares) track by $index">
+                    <div class="letter"
+                         ng-class="{'yeah': classLetters[$parent.$index][$index] == 1, 'not-here': classLetters[$parent.$index][$index] == 2}">
+                        <input placeholder="{{ placeholder($parent.$index, $index) }}"
+                               data-ng-show="editableRow[$parent.$index]" type="text"
+                               data-ng-model="userLetters[$parent.$index][$index]" maxlength="1" size="1"/>
+                        <span data-ng-show="!editableRow[$parent.$index]">{{ userLetters[$parent.$index][$index] }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-if="settingParameters" class="setup-view">
+        <button class="btn btn-default" type="button" data-ng-click="backHome()">
+            <i class="glyphicon glyphicon-home"></i> Accueil
+        </button>
+        <form class="form-signin">
+            <h2>Param&egrave;tres</h2>
+            <label for="level">Niveau</label>
+            <select class="form-control" data-ng-model="level" data-ng-change="changeLevel(level)" id="level"
+                    ng-options="_level.id as _level.name for _level in levels"></select>
+            <div class="help">
+                <ul>
+                    <li>Nombre de lignes : {{ levels[level]['nbRows'] }}</li>
+                    <li>Nombre de lettres : {{ levels[level]['nbSquares'] }}</li>
+                </ul>
+            </div>
+            <button type="button" data-ng-click="backHome()" class="btn btn-lg btn-primary btn-block">
+                Sauvegarder
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

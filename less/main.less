@@ -1,0 +1,57 @@
+h1 {
+    text-align: center;
+}
+
+.container {
+    width: 50%;
+}
+
+.board-game {
+    outline: 1px solid #CDCEC9;
+    margin: 20px auto;
+    width: 295px;
+}
+
+.row {
+    display: flex;
+}
+
+.square {
+    background: none repeat scroll #168FDE;
+    outline: 1px solid #41B0FF;
+    padding: 2px;
+}
+
+.letter {
+    color: #ffffff;
+    height: 50px;
+    padding: 10px 5px;
+    width: 50px;
+    font-weight: bold;
+    font-size: 20px;
+    text-transform: uppercase;
+    span {
+        display: block;
+        text-align: center;
+    }
+    &.yeah {
+        background: none repeat scroll #BC1A3F;
+    }
+    &.not-here {
+        background: none repeat scroll #D7C340;
+        border-radius: 50%;
+    }
+}
+
+input {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    border: medium none;
+    text-transform: uppercase;
+
+}
+
+.setup-view {
+    margin: 0 auto;
+    max-width: 295px;
+    padding: 15px;
+}
