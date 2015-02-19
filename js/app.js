@@ -1,3 +1,5 @@
+// normalise touppercase / tolowercase
+
 var motusApp = angular.module('motusApp', []);
 
 motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
@@ -13,7 +15,8 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
     $scope.partyFinnish = false;
     $scope.settingParameters = false;
     $scope.home = true;
-    $scope.correctKeyLetters = [];
+    $scope.placeholders = [];
+
 
     $scope.backHome = function() {
         $scope.settingParameters = false;
@@ -41,8 +44,8 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
     };
 
     $scope.initGame = function () {
-        $scope.correctKeyLetters = [];
         $scope.playingRow = 0;
+        $scope.placeholders = [];
         $scope.word = $scope.words[Math.floor(Math.random()*$scope.words.length)].toUpperCase();
         $scope.partyFinnish = false;
         $scope.nbSquares = $scope.levels[$scope.level]['nbSquares'];
@@ -50,7 +53,7 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
         $scope.initRows();
         $scope.initRow();
         $scope.editableRow[$scope.playingRow] = true;
-        console.info($scope.word);
+//        console.info($scope.word);
     };
 
     $scope.initRows = function () {
@@ -66,31 +69,8 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
     };
 
     $scope.initRow = function() {
-        console.info($scope.playingRow);
+        $scope.initingRow = true;
         $scope.userLetters[$scope.playingRow][0] = $scope.word[0];
-        // put correct user letters
-//        angular.forEach($scope.correctKeyLetters, function (value, key) {
-//            $scope.userLetters[$scope.playingRow][value] = $scope.word[value];
-//        });
-    };
-
-    $scope.placeholder = function(row, letterIndex) {
-//        console.log(row);
-
-        if (row == $scope.playingRow) {
-            console.info('placeholder');
-            console.log($scope.correctKeyLetters);
-            console.log(letterIndex);
-            console.info('---');
-            if ($scope.correctKeyLetters.indexOf(letterIndex) != -1) {
-                console.log('coucou');
-                return $scope.word[value];
-            }
-        }
-        return null;
-
-//        if ($scope.correctKeyLetters[letterIndex])
-//        return 'A';
     };
 
 
@@ -100,16 +80,6 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
             && ($scope.userLetters[$scope.playingRow][$scope.nbSquares - 1] != '')) {
             $scope.checkWord();
         }
-
-//        if ((!$scope.partyFinnish)
-//            && (angular.isDefined($scope.userLetters[$scope.playingRow]))) {
-//            $timeout(function() {
-//
-//            }, 1000)
-//            $scope.checkWord();
-//        }
-
-
     }, true);
 
     $scope.setClassLetters = function() {
@@ -118,8 +88,7 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
             userLetter = userLetter.toUpperCase();
             if (userLetter == $scope.word[userKey]) {
                 $scope.classLetters[$scope.playingRow][userKey] = 1;
-                $scope.correctKeyLetters.push(userKey);
-                // useless : use correctKeyLetters
+                $scope.placeholders[userKey] = userLetter;
                 nbGreat++;
             } else {
                 var search = true;
@@ -138,7 +107,12 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
     };
 
     $scope.checkWord = function () {
-        var nbGreat = $scope.setClassLetters();
+        var word = '';
+        angular.forEach($scope.userLetters[$scope.playingRow], function(value, key) {
+            word += value;
+        });
+        word = word.toLowerCase();
+        var nbGreat = ($scope.words.indexOf(word) > -1) ? $scope.setClassLetters() : 0;
         $scope.editableRow[$scope.playingRow] = false;
         $scope.playingRow++;
         if (nbGreat == $scope.nbSquares) {
@@ -166,4 +140,7 @@ motusApp.controller('gameCtrl', function ($scope, $timeout, $http) {
     $scope.range = function (n) {
         return new Array(n);
     };
+
+    $scope.changeLevel($scope.level);
+
 });

@@ -32,8 +32,10 @@
                 <div class="square" data-ng-repeat="row in range(nbSquares) track by $index">
                     <div class="letter"
                          ng-class="{'yeah': classLetters[$parent.$index][$index] == 1, 'not-here': classLetters[$parent.$index][$index] == 2}">
-                        <input placeholder="{{ placeholder($parent.$index, $index) }}"
+                        <!--<span data-ng-show="editableRow[$parent.$index]">T</span>-->
+                        <input placeholder="{{ placeholders[$index] }}"
                                data-ng-show="editableRow[$parent.$index]" type="text"
+                               data-ng-readonly="userLetters[$parent.$index][$index - 1] == ''"
                                data-ng-model="userLetters[$parent.$index][$index]" maxlength="1" size="1"/>
                         <span data-ng-show="!editableRow[$parent.$index]">{{ userLetters[$parent.$index][$index] }}</span>
                     </div>
